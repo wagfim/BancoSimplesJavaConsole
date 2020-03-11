@@ -5,6 +5,7 @@ import java.util.Scanner;
 /**
  * @author Wagner Bonfim <github.com/wagfim>
  */
+
 public class Main {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
@@ -34,7 +35,7 @@ public class Main {
             numeroConta = Integer.parseInt(scan.next());
             
             if (!checaConta(numeroConta, listaContas))
-                System.out.println("NÃºmero invÃ¡lido. Tente novamente");
+                System.out.println("Número invalido. Tente novamente");
             
             } while (!checaConta(numeroConta, listaContas));
 
@@ -45,7 +46,7 @@ public class Main {
                 senhaInformada = Integer.parseInt(scan.next());
 
                 if (!checaSenha(senhaInformada, contaEscolhida))
-                    System.out.println("Senha invÃ¡lido. Tente novamente");
+                    System.out.println("Senha invalido. Tente novamente");
 
             } while (!checaSenha(senhaInformada, contaEscolhida));
             //fim identifica conta
@@ -55,16 +56,17 @@ public class Main {
                 boolean continueRodando = true;
                 int opcaoEscolhida;
 
-                System.out.println("\nOlÃ¡, " + contaEscolhida.getCliente().getNome() + "!");
+                System.out.println("\nOla, " + contaEscolhida.getCliente().getNome() + "!");
 
                 do {                
-                    System.out.println("\nQual operaÃ§Ã£o deseja realizar?");
+                    System.out.println("\nQual operacao deseja realizar?");
                     System.out.println("1. Saldo");
                     System.out.println("2. Saque");
-                    System.out.println("3. DepÃ³sito");
+                    System.out.println("3. Deposito");
                     System.out.println("4. Transferencia entre contas");
-                    System.out.println("5. InformaÃ§Ãµes desta conta");
-                    System.out.println("6. Alternar para outra conta");
+                    System.out.println("5. Informacoes desta conta");
+                    System.out.println("6. Extrato de Operacoes");
+                    System.out.println("7. Alternar para outra conta");
                     System.out.println("0. Sair");
                     System.out.print("> ");
 
@@ -96,11 +98,19 @@ public class Main {
                             pressioneEnter();
                         break;
                         case 6:
+                            contaEscolhida.imprimeExtrato();
+                            pressioneEnter();
+                        break;
+                        case 7:
                             continueRodando = false;
                             pressioneEnter();
                         break;
+                        case 99:
+                            executaTestes(listaContas, contaEscolhida);
+                            pressioneEnter();
+                        break;
                         default:
-                            System.out.println("OpÃ§Ã£o invÃ¡lida");
+                            System.out.println("Opcao invalida");
                         break;
                     }
                 } while (continueRodando);
@@ -115,7 +125,7 @@ public class Main {
         System.out.print("Valor: ");
         valor = scan.nextDouble();
         if (conta.sacar(valor)) {
-            System.out.println("OperaÃ§Ã£o realizada com sucesso!");
+            System.out.println("Operacao realizada com sucesso!");
         } else {
             System.out.println("Erro na operacao");
         }
@@ -128,7 +138,7 @@ public class Main {
         System.out.print("Valor: ");
         valor = scan.nextDouble();
         if (conta.depositar(valor)) {
-            System.out.println("OperaÃ§Ã£o realizada com sucesso!");
+            System.out.println("Operacao realizada com sucesso!");
         } else {
             System.out.println("Erro na operacao");
         }
@@ -140,10 +150,10 @@ public class Main {
         
         int numeroContaDestino;   
         do {
-            System.out.print("Informe o nÃºmero da conta destino: ");
+            System.out.print("Informe o numero da conta destino: ");
             numeroContaDestino = Integer.parseInt(scan.nextLine());
             if (!checaConta(numeroContaDestino, listaContas)) {
-                System.out.println("NÃºmero incorreto. Verifique e tente novamente.");
+                System.out.println("Numero incorreto. Verifique e tente novamente.");
             }
         } while (!checaConta(numeroContaDestino, listaContas));
 
@@ -153,10 +163,23 @@ public class Main {
         valor = scan.nextDouble();
 
         if (contaOrigem.transferirValor(valor, contaDestino)) {
-            System.out.println("OperaÃ§Ã£o realizada com sucesso!");
+            System.out.println("Operacao realizada com sucesso!");
         } else {
             System.out.println("Erro na operacao");
         }
+    }
+    
+    public static void executaTestes(List<Conta> listaContas, Conta conta) {
+        int contaDestino = 0;
+        switch(conta.getNumero()){
+            case 4758: contaDestino = 2045; break;
+            case 2045: contaDestino = 4758; break;
+            case 1584: contaDestino = 2045; break;
+            default: break;
+        }
+        conta.sacar(15);
+        conta.depositar(7000);
+        conta.transferirValor(150, retornaConta(contaDestino, listaContas));
     }
     
     public static Conta retornaConta(int numero, List<Conta> listaContas) {
